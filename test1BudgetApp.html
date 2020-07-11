@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
+
+<style>
+.main{
+    width:1000px;
+    height: 600px;
+    background-color:ivory;
+    margin-left: auto;
+    margin-right: auto;
+}
+.header{
+    width: 100%;
+    height: 8%;
+    padding-left:30px;
+}
+*{
+    box-sizing: border-box;
+}
+.section{
+    width: 100%;
+    height: 92%;
+}
+.section::after{
+    content: "";
+    clear: both;
+    display: table;
+}
+.left{
+    width: 40%;
+    height: 100%;
+    float: left;
+    padding-left:20px;
+}
+.first{
+    width: 100%;
+    height: 50%;
+}
+.first form{
+    border: 2px solid green;
+    border-radius: 5px;
+    height: 180px;
+    padding-left: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#btnCalculate{
+    border-color: green;
+    color: green;
+    box-shadow: 0 4px 8px 0 rgba(42, 221, 25, 0.2), 0 6px 20px 0 rgba(148, 187, 39, 0.19);
+}
+.second{
+    margin-top: -50px;
+    width: 100%;
+    height: 55%; 
+}
+.second form{
+    border: 2px solid rgba(255, 0, 0, 0.65);
+    border-radius: 5px;
+    height: 280px;
+    padding-left: 15px;
+    margin-left: 10px;
+    margin-right: 10px;padding-top: 5px;
+}
+#btnExpense{
+    border-color: red;
+    color: red;
+    box-shadow: 0 4px 8px 0 rgba(221, 25, 74, 0.2), 0 6px 20px 0 rgba(238, 55, 70, 0.19);
+}
+input{
+    border-radius: 5px;
+}
+.right{
+    width: 60%;
+    height: 100% ;
+    float: left;
+    
+}
+.grid-container{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: 220px 215px;
+    padding: 0;
+    grid-gap: 0;
+    padding-left: 20px;
+}
+.grid-container>div{
+    text-align: center;
+    padding: 0;
+}
+#budgetAmount, #balance, #l{
+    color: green;
+    font-size: 20px;
+}
+#expenseAmount, #l1{
+    color: red;
+    font-size: 20px;
+}
+.item4{
+    grid-column: 1/ span 3;
+}
+th, td{
+    padding-left: 60px;
+}
+</style>
+
+<script>
+    var budget1=0;
+    var totalBudget=0;
+    var expenseArr=[];
+    var arr=[];
+    var obj;
+    function myBudget(){
+         budget1=parseInt(document.getElementById("budget").value||0);
+         totalBudget+=budget1;
+         document.getElementById("budgetAmount").innerHTML=totalBudget;
+         calculateBalance();
+       
+    }
+
+    
+    function myExpense(){
+        var expense1=document.getElementById("expense").value;
+        //document.getElementById("expenseTitle").innerHTML+= expense1+"<br>";
+    
+        var expense2=parseInt(document.getElementById("amount").value||0);
+        //document.getElementById("expenseValue").innerHTML+=expense2 + "<br>";
+        
+        addAmount(expense2);
+        calculateBalance();
+    
+        
+    
+        obj={name: expense1,
+            value: expense2
+            };
+        expenseArr.push(obj);
+        arr.push(obj);
+        expenseArr.forEach(function(x, y){
+            $("#budgetTable").append('<tr>'
+            +' <td style="color: red;">' + x.name+ '</td>'
+            +'<td style="color: red;">'+x.value+'</td>'
+            +'<td>'+'<i class="fa fa-edit" style="font-size:18px;color:blue; onclick="editFunction('+y+', this)"></i>&nbsp;&nbsp;<i class="fa fa-trash-o" style="font-size:18px;color:red" onclick="deleteFunction('+y+', this)">'+'</td>'
+            +'</tr>');
+            delete expenseArr[y];
+        });
+    }
+    function addAmount(amt){
+        var x= parseInt(document.getElementById("expenseAmount").innerHTML||0);
+        document.getElementById("expenseAmount").innerHTML= x + parseInt(amt);
+    }
+    function calculateBalance(){
+        var totalBalance=0, x=0, y=0;
+         y=parseInt(document.getElementById("budgetAmount").innerHTML||0);
+         x=parseInt(document.getElementById("expenseAmount").innerHTML||0);
+        totalBalance= parseInt(y)-parseInt(x);
+        document.getElementById("balance").innerHTML=totalBalance; 
+    }
+    function deleteFunction(val, z){
+       
+        var a=arr[val].value;
+        var examt=document.getElementById("expenseAmount").innerHTML;
+        document.getElementById("expenseAmount").innerHTML=examt-a;
+        calculateBalance();
+        $(z).parent().parent().remove();
+    
+    }
+    
+    
+    
+    </script>
+ </head>
+ <body>
+
+    <div class="main">
+        <div class="header">
+        <h1>BUDGET APP</h1>
+        </div><br>
+        <div class="section">
+            <div class="left">
+                <div class="first">
+                    <form>
+                        <h3 for="budget">Please Enter Your Budget</h3>
+                        <input type="text" id="budget" placeholder="Please Enter Your Budget" style="width:300px;height: 30px;" >
+                        <br><br>
+                        <input type="button" onclick="myBudget()" id="btnCalculate" value="Calculate" style="width:100px;height: 30px;">
+                    </form>
+                </div> 
+                <div class="second">
+                    <form>
+                        <h3 for="expense">Please Enter Your Expense</h3>
+                        <input type="text" id="expense" placeholder="Please Enter Your Expense" style="width:300px;height: 30px;">
+                        <br>
+                        <h3 for="amount">Please Enter Expense amount</h3>
+                        <input type="text" id="amount" placeholder="Please Enter Your Expense amount" style="width:300px;height: 30px;"><br><br>
+                        <input type="button" onclick="myExpense()" id="btnExpense" value="Add Expense"style="width:100px;height: 30px;">
+                    </form>
+                </div>
+            </div>
+            <div class="right">
+                <div class="grid-container">
+                    <div>
+                        <h3>BUDGET</h3>
+                        <i class="fa fa-money" style="font-size:40px;color:blue;"></i><br><br>
+                        <label id="l">$<span id="budgetAmount"></span></label>
+                    </div>
+                    <div>
+                        <h3>EXPENSE</h3>
+                        <i class="fa fa-credit-card" style="font-size:40px;color:blue;"></i><br><br>
+                        <label id="l1">$<span id="expenseAmount"></span></label>
+                    </div>
+                    <div>
+                        <h3>BALANCE</h3>
+                        <i class="fa fa-dollar" style="font-size:40px;color: blue;"></i><br><br>
+                        <label id="l">$<span id="balance"></span></label>
+                    </div>  
+                    <div class="item4">
+                        <table id="budgetTable">
+                            <tr>
+                                <th>Expense Title</th>
+                                <th>Expense Value</th>
+                                <th></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+</body>
+</html>
